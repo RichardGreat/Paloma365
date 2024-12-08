@@ -1,0 +1,44 @@
+create table r_seats (
+  seat_id           int not null,
+  seat_number       int not null,
+ constraint r_seats_pk primary key (seat_id)
+);
+
+create table r_products (
+  product_id        int not null,
+  name              text not null,
+  price             real not null,
+ constraint r_products_pk primary key (product_id)
+);
+
+create table r_product_types (
+  product_type_id          int not null,
+  name                     int not null,
+ constraint r_product_type_pk primary key (product_type_id)
+);
+
+create table r_product_type_binds (
+  product_type_id          int not null,
+  product_id               int not null,
+ constraint r_product_type_binds_pk primary key (product_type_id, product_id)
+ constraint r_product_type_binds_f1 foreign key (product_type_id) references r_product_types(product_type_id)
+ constraint r_product_type_binds_f2 foreign key (product_id) references r_products(product_id)
+);
+
+create table c_orders (
+  order_id            int not null,
+  order_date          text not null,
+  seat_id             int not null,
+  status              text not null, -- (N) New  (C) complete  (P) In Progress
+ constraint c_orders_pk primary key (order_id)
+ constraint c_orders_f1 foreign key (seat_id) references r_seats(seat_id)
+);
+
+create table c_order_products (
+  order_id               int not null,
+  product_unit_id        int not null,
+  product_id             int not null,
+  price                  real,
+  quantity               int,
+ constraint c_order_products_pk primary key (order_id, product_unit_id)
+);
