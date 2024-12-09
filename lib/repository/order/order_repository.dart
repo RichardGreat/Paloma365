@@ -28,14 +28,15 @@ class OrderRepository {
 
   // Load products
   Future<List<Product>> getProducts(int orderId) async {
-    const sql = """
+    final sql = """
     SELECT p.*, 
            (SELECT pt.${RProductTypeBinds.C_PRODUCT_TYPE_ID}
               FROM ${RProductTypeBinds.TABLE_NAME} pt
              WHERE pt.${RProductTypeBinds.C_PRODUCT_ID} = p.${RProducts.C_PRODUCT_ID}) as product_type_id,
            (SELECT op.${COrderProducts.C_QUANTITY}
               FROM ${COrderProducts.TABLE_NAME} op
-             WHERE op.${COrderProducts.C_PRODUCT_ID} = p.${RProducts.C_PRODUCT_ID}) as quantity
+             WHERE op.${COrderProducts.C_ORDER_ID} = $orderId 
+               AND op.${COrderProducts.C_PRODUCT_ID} = p.${RProducts.C_PRODUCT_ID}) as quantity
       FROM ${RProducts.TABLE_NAME} p
     """;
     final result = await db.rawQuery(sql);
@@ -53,17 +54,17 @@ class OrderRepository {
   // Get existing order or create new one
   Future<Order> getOrCreateOrder(int seatId) async {
     // Try to find existing incomplete order for this seat
-    const sql = """
+    final sql = """
        SELECT o.*, 
               (SELECT SUM(p.${COrderProducts.C_PRICE} * p.${COrderProducts.C_QUANTITY}) as total_amount 
                  FROM ${COrderProducts.TABLE_NAME} p
                 WHERE p.${COrderProducts.C_ORDER_ID} = o.${COrders.C_ORDER_ID}) as total_amount
          FROM ${COrders.TABLE_NAME} o
-        WHERE o.${COrders.C_SEAT_ID} = ?
-          AND o.${COrders.C_STATUS} != ?
+        WHERE o.${COrders.C_SEAT_ID} = $seatId
+          AND o.${COrders.C_STATUS} != '${OrderPref.ORDER_STATUS_COMPLETE}'
     """;
 
-    final existingOrders = await db.rawQuery(sql, [seatId, OrderPref.ORDER_STATUS_COMPLETE]);
+    final existingOrders = await db.rawQuery(sql);
 
     if (existingOrders.isNotEmpty) {
       // Found existing order, load its items

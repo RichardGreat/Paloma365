@@ -11,9 +11,9 @@ class OrderHistory {
     required this.seatNumber,
     required this.orderDate,
     required this.status,
-    required this.total,
+    required double total,
     required this.items,
-  });
+  }) : total = (total * 0.15) + total;
 
   factory OrderHistory.fromMap(Map<String, dynamic> map) {
     return OrderHistory(
