@@ -36,9 +36,8 @@ create table c_orders (
 
 create table c_order_products (
   order_id               int not null,
-  product_unit_id        int not null,
   product_id             int not null,
   price                  real,
   quantity               int,
- constraint c_order_products_pk primary key (order_id, product_unit_id)
+ constraint c_order_products_pk primary key (order_id, product_id)
 );

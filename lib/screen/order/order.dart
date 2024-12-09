@@ -315,23 +315,6 @@ class OrderTotalBar extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Divider(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total Quantity:',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Text(
-                      state.totalQuantity.toStringAsFixed(0),
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 16),
                 if (state.isNew())
                   SizedBox(
@@ -362,48 +345,53 @@ class OrderTotalBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: state.totalQuantity > 0
-                              ? () {
-                                  context.read<OrderBloc>().add(SaveOrder());
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      Expanded(
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: state.totalQuantity > 0
+                                ? () {
+                                    context.read<OrderBloc>().add(SaveOrder());
+                                  }
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'Update Order',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                            child: const Text(
+                              'Update Order',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: state.totalQuantity > 0
-                              ? () {
-                                  context.read<OrderBloc>().add(CompleteOrder());
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: state.totalQuantity > 0
+                                ? () {
+                                    context.read<OrderBloc>().add(CompleteOrder());
+                                  }
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'Complete',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                            child: const Text(
+                              'Complete',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -416,7 +404,6 @@ class OrderTotalBar extends StatelessWidget {
         }
         return const SizedBox.shrink();
       },
-
       listener: (BuildContext context, OrderState state) {
         if (state is OrderSaved) {
           Navigator.pop(mainContext);

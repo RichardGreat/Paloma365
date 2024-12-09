@@ -60,7 +60,7 @@ class OrderRepository {
                 WHERE p.${COrderProducts.C_ORDER_ID} = o.${COrders.C_ORDER_ID}) as total_amount
          FROM ${COrders.TABLE_NAME} o
         WHERE o.${COrders.C_SEAT_ID} = ?
-          AND o.${COrders.C_STATUS} = ?
+          AND o.${COrders.C_STATUS} != ?
     """;
 
     final existingOrders = await db.rawQuery(sql, [seatId, OrderPref.ORDER_STATUS_COMPLETE]);

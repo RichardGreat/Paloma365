@@ -19,11 +19,9 @@ class OrderApi {
   static Future<void> _saveProducts(
       Batch batch, int orderId, List<OrderProductSaveModel> products) async {
     for (var product in products) {
-      final productUnitId = DateTime.now().millisecondsSinceEpoch;
       await Z_COrderProducts.saveOne(
         batch,
         orderId: orderId,
-        productUnitId: productUnitId,
         productId: product.productId,
         price: product.price,
         quantity: product.quantity,
